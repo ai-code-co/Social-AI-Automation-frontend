@@ -46,17 +46,22 @@ npm run lint
 
 ## Backend API
 
-The frontend currently points to the backend at:
+The frontend uses `VITE_API_BASE_URL` for API requests. For local development it falls back to:
 
 ```text
 http://localhost:8000
 ```
 
-Update `src/api.js` if your deployed backend URL is different.
+Create `.env.local` for local overrides:
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
+```
 
 ## Deployment Notes
 
 - Deploy the contents of this `frontend` folder as the frontend repository.
 - Build command: `npm run build`
 - Output directory: `dist`
-- Make sure the backend deployment allows CORS from the frontend domain.
+- On Vercel, set `VITE_API_BASE_URL` to your Render backend URL.
+- Make sure the backend deployment allows CORS from the Vercel frontend domain.
