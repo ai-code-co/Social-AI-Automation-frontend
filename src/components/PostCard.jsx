@@ -58,7 +58,7 @@ export default function PostCard({ post, onRefresh }) {
 
     await updatePost(post.id, {
       status: 'scheduled',
-      scheduled_at: scheduledAt,
+      scheduled_at: new Date(scheduledAt).toISOString(),
     });
     setScheduledAt('');
     onRefresh();
@@ -99,6 +99,13 @@ export default function PostCard({ post, onRefresh }) {
   const showPostActions = post.status !== 'published';
   const canEditPost = post.status !== 'published';
   const isLongCaption = (post.caption || '').length > 220;
+  const scheduledAtDate = post.scheduled_at
+    ? new Date(
+        /(?:Z|[+-]\d{2}:\d{2})$/.test(post.scheduled_at)
+          ? post.scheduled_at
+          : `${post.scheduled_at}Z`,
+      )
+    : null;
 
   return (
     <article className="flex min-h-72 flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-lg hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-teal-500/40 dark:hover:shadow-black/20 sm:p-5">
@@ -212,7 +219,7 @@ export default function PostCard({ post, onRefresh }) {
       {post.scheduled_at && (
         <p className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
           <Clock size={13} aria-hidden="true" />
-          Scheduled: {new Date(post.scheduled_at).toLocaleString()}
+          Scheduled: {scheduledAtDate.toLocaleString()}
         </p>
       )}
 
