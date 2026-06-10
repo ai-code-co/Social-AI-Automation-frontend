@@ -174,8 +174,8 @@ export default function App() {
               </div>
             </div>
 
-            <div className="grid w-full grid-cols-2 gap-1.5 sm:grid-cols-[minmax(15rem,1fr)_auto_auto] lg:w-[36rem] lg:grid-cols-[minmax(12rem,15rem)_auto_minmax(8rem,11rem)_auto]">
-              <div className="relative col-span-2 sm:col-span-1">
+            <div className="grid w-full grid-cols-3 gap-1.5 sm:grid-cols-[minmax(15rem,1fr)_auto_auto] lg:w-[36rem] lg:grid-cols-[minmax(12rem,15rem)_auto_minmax(8rem,11rem)_auto]">
+              <div className="relative col-span-3 sm:col-span-1">
                 <button
                   type="button"
                   onClick={() => setBrandMenuOpen(open => !open)}
@@ -223,7 +223,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => applyTheme(isDark ? 'light' : 'dark')}
-                className={`inline-flex min-h-8 items-center justify-center gap-2 rounded-md px-3 text-xs font-medium ring-1 backdrop-blur transition focus:outline-none focus:ring-4 focus:ring-teal-200/30 ${
+                className={`inline-flex min-h-8 min-w-0 items-center justify-center gap-2 rounded-md px-2 text-xs font-medium ring-1 backdrop-blur transition focus:outline-none focus:ring-4 focus:ring-teal-200/30 sm:px-3 ${
                   isDark
                     ? 'bg-white text-slate-950 ring-white/30 hover:bg-slate-100'
                     : 'bg-white/10 text-white ring-white/15 hover:bg-white/15'
@@ -234,22 +234,22 @@ export default function App() {
                 <span className="hidden sm:inline">{isDark ? 'Dark' : 'Light'}</span>
               </button>
 
-              <div className="inline-flex min-h-8 min-w-0 items-center gap-2 rounded-md bg-white/10 px-3 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur">
-                <UserRound size={15} aria-hidden="true" />
+              <div className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-md bg-white/10 px-2 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur sm:gap-2 sm:px-3">
+                <UserRound className="shrink-0" size={15} aria-hidden="true" />
                 <span className="truncate">{auth.user?.full_name || auth.user?.email || 'Account'}</span>
               </div>
 
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex min-h-8 items-center justify-center gap-2 rounded-md bg-white/10 px-3 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/15 focus:outline-none focus:ring-4 focus:ring-teal-200/30"
+                className="inline-flex min-h-8 min-w-0 items-center justify-center gap-2 rounded-md bg-white/10 px-2 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/15 focus:outline-none focus:ring-4 focus:ring-teal-200/30 sm:px-3"
                 title="Log out"
               >
                 <LogOut size={15} aria-hidden="true" />
                 <span className="hidden sm:inline">Logout</span>
               </button>
 
-              <nav className="col-span-2 grid w-full grid-cols-4 gap-1 rounded-md bg-white/10 p-1 ring-1 ring-white/15 backdrop-blur sm:col-span-3 lg:col-span-4">
+              <nav className="col-span-3 grid w-full grid-cols-4 gap-1 rounded-md bg-white/10 p-1 ring-1 ring-white/15 backdrop-blur sm:col-span-3 lg:col-span-4">
                 {tabs.map(tab => {
                   const Icon = tab.icon;
                   return (
