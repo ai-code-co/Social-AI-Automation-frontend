@@ -241,7 +241,7 @@ export default function App() {
                 type="button"
                 onClick={handleLogout}
                 aria-label="Log out"
-                className="inline-flex min-h-8 w-12 min-w-12 items-center justify-center rounded-md bg-white/10 px-0 text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/15 focus:outline-none focus:ring-4 focus:ring-teal-200/30 lg:w-full lg:min-w-0"
+                className="inline-flex min-h-8 w-full min-w-0 items-center justify-center rounded-md bg-white/10 px-0 text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/15 focus:outline-none focus:ring-4 focus:ring-teal-200/30"
                 title="Log out"
               >
                 <LogOut className="shrink-0" size={15} aria-hidden="true" />
