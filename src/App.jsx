@@ -295,14 +295,14 @@ export default function App() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`inline-flex min-h-7 items-center justify-center gap-1.5 rounded-md px-2 text-[0.7rem] font-medium transition sm:gap-2 sm:px-3 ${
+                      className={`inline-flex min-h-7 min-w-0 items-center justify-center gap-1 rounded-md px-1.5 text-[0.68rem] font-medium transition sm:gap-2 sm:px-3 sm:text-[0.7rem] ${
                         activeTab === tab.id
                           ? 'bg-white text-slate-950 shadow-sm dark:bg-slate-100 dark:text-slate-950'
                           : 'text-white/75 hover:bg-white/10 hover:text-white'
                       }`}
                     >
-                      <Icon size={14} aria-hidden="true" />
-                      <span>{tab.label}</span>
+                      <Icon className="shrink-0" size={14} aria-hidden="true" />
+                      <span className="hidden min-w-0 truncate sm:inline">{tab.label}</span>
                     </button>
                   );
                 })}
