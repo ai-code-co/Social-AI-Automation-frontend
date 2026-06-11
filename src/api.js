@@ -93,6 +93,9 @@ export const approvePost = (id) =>
 export const updatePost = (id, data) =>
   API.put(`/posts/${id}`, data);
 
+export const duplicatePost = (id, data) =>
+  API.post(`/posts/${id}/duplicate`, data);
+
 export const approveAll = (brandId) =>
   API.post('/posts/approve-all', null, { params: { brand_id: brandId } });
 

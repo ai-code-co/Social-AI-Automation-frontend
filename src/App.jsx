@@ -1,11 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Check, ChevronDown, Link2, LogOut, Moon, Palette, PenLine, Rows3, Sun, Trash2, UserRound } from 'lucide-react';
+import { CalendarDays, Check, ChevronDown, Link2, LogOut, Moon, Palette, PenLine, Rows3, Sun, Trash2, UserRound } from 'lucide-react';
 import { clearAuthSession, deleteCurrentUser, getBrands, getCurrentUser, getStoredToken, getStoredUser } from './api';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 import BrandSettings from './components/BrandSettings';
 import GeneratePost from './components/GeneratePost';
 import SocialAccounts from './components/SocialAccounts';
+import Calendar from './components/Calendar';
 
 const syncDocumentTheme = (nextTheme) => {
   document.documentElement.classList.toggle('dark', nextTheme === 'dark');
@@ -35,6 +36,7 @@ export default function App() {
 
   const tabs = [
     { id: 'dashboard', label: 'Posts', icon: Rows3 },
+    { id: 'calendar', label: 'Calendar', icon: CalendarDays },
     { id: 'generate', label: 'Generate', icon: PenLine },
     { id: 'social', label: 'Social', icon: Link2 },
     { id: 'brand', label: 'Businesses', icon: Palette },
@@ -201,7 +203,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="grid w-full grid-cols-4 gap-1.5 sm:grid-cols-[minmax(12rem,1fr)_auto_auto_auto_auto] lg:w-[42rem] lg:grid-cols-[minmax(13rem,1.8fr)_repeat(4,minmax(0,1fr))]">
+            <div className="grid w-full grid-cols-4 gap-1.5 sm:grid-cols-[minmax(12rem,1fr)_auto_auto_auto_auto] lg:w-[36rem] lg:grid-cols-[minmax(8rem,1.25fr)_4.75rem_minmax(5rem,0.7fr)_2.5rem_2.5rem]">
               <div className="relative col-span-4 sm:col-span-1">
                 <button
                   type="button"
@@ -250,7 +252,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => applyTheme(isDark ? 'light' : 'dark')}
-                className={`inline-flex min-h-8 min-w-0 items-center justify-center gap-2 rounded-md px-2 text-xs font-medium ring-1 backdrop-blur transition focus:outline-none focus:ring-4 focus:ring-teal-200/30 sm:px-3 lg:w-full ${
+                className={`inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-md px-2 text-xs font-medium ring-1 backdrop-blur transition focus:outline-none focus:ring-4 focus:ring-teal-200/30 lg:w-full ${
                   isDark
                     ? 'bg-white text-slate-950 ring-white/30 hover:bg-slate-100'
                     : 'bg-white/10 text-white ring-white/15 hover:bg-white/15'
@@ -258,10 +260,10 @@ export default function App() {
                 title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
               >
                 {isDark ? <Moon size={15} aria-hidden="true" /> : <Sun size={15} aria-hidden="true" />}
-                <span className="hidden sm:inline">{isDark ? 'Dark' : 'Light'}</span>
+                <span className="hidden lg:inline">{isDark ? 'Dark' : 'Light'}</span>
               </button>
 
-              <div className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-md bg-white/10 px-2 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur sm:gap-2 sm:px-3">
+              <div className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1.5 rounded-md bg-white/10 px-2 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur">
                 <UserRound className="shrink-0" size={15} aria-hidden="true" />
                 <span className="truncate">{auth.user?.full_name || auth.user?.email || 'Account'}</span>
               </div>
@@ -286,7 +288,7 @@ export default function App() {
                 <LogOut className="shrink-0" size={15} aria-hidden="true" />
               </button>
 
-              <nav className="col-span-4 grid w-full grid-cols-4 gap-1 rounded-md bg-white/10 p-1 ring-1 ring-white/15 backdrop-blur sm:col-span-5 lg:col-span-5">
+              <nav className="col-span-4 grid w-full grid-cols-5 gap-1 rounded-md bg-white/10 p-1 ring-1 ring-white/15 backdrop-blur sm:col-span-5 lg:col-span-5">
                 {tabs.map(tab => {
                   const Icon = tab.icon;
                   return (
@@ -319,6 +321,7 @@ export default function App() {
 
           <div className="rounded-lg border border-white/70 bg-white/90 p-3 shadow-2xl shadow-slate-900/10 backdrop-blur transition-colors dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/30 sm:p-5">
             {activeTab === 'dashboard' && <Dashboard brand={selectedBrand} />}
+            {activeTab === 'calendar' && <Calendar brand={selectedBrand} />}
             {activeTab === 'generate' && <GeneratePost brand={selectedBrand} />}
             {activeTab === 'social' && <SocialAccounts brand={selectedBrand} />}
             {activeTab === 'brand' && (
