@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BarChart3, Eye, Heart, Loader2, MessageCircle, MousePointerClick, Share2, Sparkles, Trophy } from 'lucide-react';
-import { getPerformanceSummary } from '../api';
+import { BarChart3, Eye, Heart, Loader2, MessageCircle, MousePointerClick, RefreshCw, Share2, Sparkles, Trophy } from 'lucide-react';
+import { getPerformanceSummary, syncPerformance } from '../api';
 
 const formatNumber = (value) => new Intl.NumberFormat().format(value || 0);
 
@@ -19,6 +19,9 @@ const shortCaption = (caption) => {
 export default function Performance({ brand }) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
+  const [syncError, setSyncError] = useState('');
   const [postPage, setPostPage] = useState(1);
 
   const fetchPerformance = useCallback(async () => {
@@ -42,6 +45,25 @@ export default function Performance({ brand }) {
   useEffect(() => {
     queueMicrotask(fetchPerformance);
   }, [fetchPerformance]);
+
+  const handleSyncPerformance = async () => {
+    if (!brand) return;
+
+    setSyncing(true);
+    setSyncMessage('');
+    setSyncError('');
+    try {
+      const res = await syncPerformance(brand.id);
+      const { updated, failed, skipped } = res.data;
+      setSyncMessage(`Synced ${updated} posts. ${failed} failed, ${skipped} skipped.`);
+      await fetchPerformance();
+    } catch (err) {
+      console.error(err);
+      setSyncError(err.response?.data?.detail || 'Unable to sync performance metrics.');
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const maxPlatformEngagement = useMemo(() => (
     Math.max(...(summary?.platforms || []).map(platform => platform.engagement_count), 1)
@@ -101,10 +123,31 @@ export default function Performance({ brand }) {
             Track post metrics for {brand.company_name}, compare platforms, and spot what performs best.
           </p>
         </div>
-        <div className="rounded-md bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600 dark:bg-slate-900 dark:text-slate-300">
-          {formatNumber(totals.published_count)} published posts
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={handleSyncPerformance}
+            disabled={syncing}
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-slate-950 px-3 text-xs font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
+          >
+            {syncing ? <Loader2 className="animate-spin" size={15} aria-hidden="true" /> : <RefreshCw size={15} aria-hidden="true" />}
+            {syncing ? 'Syncing' : 'Sync Performance'}
+          </button>
+          <div className="inline-flex min-h-10 items-center rounded-md bg-slate-100 px-3 text-xs font-semibold text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+            {formatNumber(totals.published_count)} published posts
+          </div>
         </div>
       </div>
+
+      {(syncMessage || syncError) && (
+        <div className={`rounded-lg border p-3 text-sm leading-6 ${
+          syncError
+            ? 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-200'
+            : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200'
+        }`}>
+          {syncError || syncMessage}
+        </div>
+      )}
 
       {!hasMetrics && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-200">

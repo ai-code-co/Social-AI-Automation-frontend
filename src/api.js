@@ -111,6 +111,9 @@ export const deletePost = (id) =>
 export const getPerformanceSummary = (brandId) =>
   API.get('/performance/summary', { params: { brand_id: brandId } });
 
+export const syncPerformance = (brandId) =>
+  API.post('/performance/sync', null, { params: { brand_id: brandId } });
+
 export const getBrand = () =>
   API.get('/brand/');
 
