@@ -22,6 +22,7 @@ export default function Performance({ brand }) {
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState('');
   const [syncError, setSyncError] = useState('');
+  const [syncErrors, setSyncErrors] = useState([]);
   const [postPage, setPostPage] = useState(1);
 
   const fetchPerformance = useCallback(async () => {
@@ -52,10 +53,15 @@ export default function Performance({ brand }) {
     setSyncing(true);
     setSyncMessage('');
     setSyncError('');
+    setSyncErrors([]);
     try {
       const res = await syncPerformance(brand.id);
-      const { updated, failed, skipped } = res.data;
-      setSyncMessage(`Synced ${updated} posts. ${failed} failed, ${skipped} skipped.`);
+      const { updated, failed, skipped, errors } = res.data;
+      const message = `Synced ${updated} posts. ${failed} failed, ${skipped} skipped.`;
+      setSyncMessage(message);
+      if (errors && errors.length > 0) {
+        setSyncErrors(errors);
+      }
       await fetchPerformance();
     } catch (err) {
       console.error(err);
@@ -146,6 +152,16 @@ export default function Performance({ brand }) {
             : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-200'
         }`}>
           {syncError || syncMessage}
+          {syncErrors.length > 0 && (
+            <div className="mt-2 space-y-1 text-xs">
+              <p className="font-semibold">Sync errors:</p>
+              {syncErrors.map((err, idx) => (
+                <p key={idx} className="ml-2">
+                  Post {err.post_id} ({err.platform}): {err.error}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
