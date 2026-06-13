@@ -263,7 +263,7 @@ export default function BrandSettings({ brands, selectedBrand, onSelectBrand, on
       <ConfirmDialog
         open={deleteDialogOpen}
         title="Delete business?"
-        message={`This will permanently delete ${selectedBrand?.company_name || 'this business'}. Businesses with posts cannot be deleted.`}
+        message={`This will permanently delete ${selectedBrand?.company_name || 'this business'} and all associated posts and social accounts.`}
         confirmLabel="Delete"
         error={deleteError}
         loading={deleting}
